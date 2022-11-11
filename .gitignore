@@ -1,0 +1,8 @@
+# Folders
+.idea
+venv
+build
+*.egg-info
+
+# Files
+requirements.txt
