@@ -5,4 +5,5 @@ build
 *.egg-info
 
 # Files
-requirements.txt
+formatters.txt
+check_pkg.bat
