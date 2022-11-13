@@ -125,9 +125,10 @@ class GenericMatrix:
         ):
             return False
 
-        for self_element, other_element in zip(self, other):
-            if abs(self_element - other_element) > 1e-6:
-                return False
+        for self_row, other_row in zip(self, other):
+            for self_element, other_element in zip(self_row, other_row):
+                if abs(self_element - other_element) > 1e-6:
+                    return False
 
         return True
 
