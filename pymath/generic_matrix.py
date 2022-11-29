@@ -160,6 +160,27 @@ class GenericMatrix:
 
         return True
 
+    def __getitem__(
+        self, item: Union[int, Tuple[int, int]]
+    ) -> Union[npt.NDArray, float]:
+        return self.__matrix[item]
+
+    def __setitem__(
+        self, key: Union[int, Tuple[int, int]], value: Union[npt.NDArray, float]
+    ):
+        if isinstance(key, int) and not isinstance(value, np.ndarray):
+            raise ValueError(
+                f"Type value '{type(value)}' was given, but expected "
+                f"'np.ndarray' for coordinate '{key}'"
+            )
+        elif isinstance(key, Sequence) and not isinstance(value, (int, float)):
+            raise ValueError(
+                f"Type value '{type(value)}' was given, but expected "
+                f"'float' for coordinate '{key}'"
+            )
+
+        self.__matrix[key] = value
+
     @property
     def as_array(self) -> npt.NDArray:
         """numpy array: Current matrix as a numpy array"""
