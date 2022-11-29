@@ -3,7 +3,7 @@ This module contains the GenericMatrix class
 """
 from __future__ import annotations
 
-from typing import Iterator, Tuple, Union
+from typing import Iterator, Tuple, Union, Sequence
 
 import numpy as np
 import numpy.typing as npt
@@ -69,6 +69,34 @@ class GenericMatrix:
             raise ValueError("Cannot sum matrices with different shape")
 
         return GenericMatrix(matrix=self.__matrix + other)
+
+    def __sub__(
+        self, other: Union[GenericMatrix, npt.NDArray]
+    ) -> GenericMatrix:
+        """
+        Enables the subtraction through the '-' character
+
+        Parameters
+        ----------
+        other: GenericMatrix or numpy N-dimensional array
+            Second matrix to which will take place at the subtraction
+
+        Returns
+        -------
+        GenericMatrix:
+            Matrix instance with the final subtracted value.
+        """
+        if isinstance(other, GenericMatrix):
+            other = other.as_array
+        elif not isinstance(other, np.ndarray):
+            raise TypeError(
+                f"Unsupported type '{type(other)}' for sum operator"
+            )
+
+        if self.shape != other.shape:
+            raise ValueError("Cannot sum matrices with different shape")
+
+        return GenericMatrix(matrix=self.__matrix - other)
 
     def __mul__(
         self, other: Union[int, float, npt.NDArray, GenericMatrix]
@@ -141,3 +169,13 @@ class GenericMatrix:
     def shape(self) -> Tuple[int, int]:
         """tuple: Matrix dimensions organized as [rows, cols]"""
         return self.__matrix.shape
+
+    @property
+    def inverse(self) -> GenericMatrix:
+        """GenericMatrix: Inverse of the given matrix"""
+        if self.shape[0] != self.shape[1]:
+            raise ValueError(
+                "The inverse matrix is only valid for square matrices"
+            )
+
+        return GenericMatrix(matrix=np.linalg.inv(self.__matrix))
